@@ -1,0 +1,8 @@
+@import url('https://fonts.googleapis.com/css2?family=Host+Grotesk:wght@400;500;600;700&family=Inter:wght@400;600&family=Plus+Jakarta+Sans:wght@700&display=swap');
+
+/* Libertinus Serif Italic fallback or custom import if available */
+@font-face {
+  font-family: 'Libertinus Serif';
+  src: local('Libertinus Serif Italic'), local('LibertinusSerif-Italic');
+  font-style: italic;
+}
