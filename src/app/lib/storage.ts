@@ -3,6 +3,11 @@ const KEYS = {
   USER: "leopet_user",
   SUBSCRIPTIONS: "leopet_subscriptions",
   EVIDENCE_RATINGS: "leopet_evidence_ratings",
+  ADMIN_SOLICITUDES: "leopet_admin_solicitudes",
+  ADMIN_DENUNCIAS: "leopet_admin_denuncias",
+  FOUNDATION_MASCOTAS: "leopet_fundacion_mascotas",
+  FOUNDATION_EVIDENCIAS: "leopet_fundacion_evidencias",
+  FOUNDATION_ADVERTENCIAS: "leopet_fundacion_advertencias",
 } as const;
 
 export const storage = {
@@ -60,5 +65,70 @@ export const storage = {
 
   setEvidenceRatings: (ratings: Record<string, { rating: number; comment?: string }>) => {
     localStorage.setItem(KEYS.EVIDENCE_RATINGS, JSON.stringify(ratings));
+  },
+
+  getSolicitudes: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.ADMIN_SOLICITUDES);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setSolicitudes: (solicitudes: any[]) => {
+    localStorage.setItem(KEYS.ADMIN_SOLICITUDES, JSON.stringify(solicitudes));
+  },
+
+  getDenuncias: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.ADMIN_DENUNCIAS);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setDenuncias: (denuncias: any[]) => {
+    localStorage.setItem(KEYS.ADMIN_DENUNCIAS, JSON.stringify(denuncias));
+  },
+
+  getFoundationMascotas: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.FOUNDATION_MASCOTAS);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setFoundationMascotas: (mascotas: any[]) => {
+    localStorage.setItem(KEYS.FOUNDATION_MASCOTAS, JSON.stringify(mascotas));
+  },
+
+  getFoundationEvidencias: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.FOUNDATION_EVIDENCIAS);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setFoundationEvidencias: (evidencias: any[]) => {
+    localStorage.setItem(KEYS.FOUNDATION_EVIDENCIAS, JSON.stringify(evidencias));
+  },
+
+  getFoundationAdvertencias: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.FOUNDATION_ADVERTENCIAS);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setFoundationAdvertencias: (advertencias: any[]) => {
+    localStorage.setItem(KEYS.FOUNDATION_ADVERTENCIAS, JSON.stringify(advertencias));
   },
 };

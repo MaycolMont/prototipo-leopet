@@ -6,6 +6,13 @@ import { MOCK_FUNDACIONES } from '../../data/mockFundaciones';
 import { MOCK_MASCOTAS } from '../../data/mockMascotas';
 import { useManada } from '../context/ManadaContext';
 
+const statusLabel: Record<string, string> = {
+  NO_APADRINADO: "Disponible",
+  APADRINADO: "Apadrinado",
+  EN_PROCESO: "En Proceso",
+  ADOPTADO: "Adoptado",
+};
+
 export function FundacionDetail() {
   const { id } = useParams<{ id: string }>();
   const { addToManada, pets: manadaPets } = useManada();
@@ -14,23 +21,22 @@ export function FundacionDetail() {
   const mascotas = MOCK_MASCOTAS.filter((m) => m.fundacionId === fundacion.id);
 
   const handleApadrinar = (mascota: typeof MOCK_MASCOTAS[0]) => {
-    if (manadaPets.some((mp) => mp.petId === mascota.id)) return;
+    if (manadaPets.some((mp) => mp.petId === String(mascota.id))) return;
     addToManada({
       id: `manada-${mascota.id}`,
-      petId: mascota.id,
-      nombre: mascota.nombre,
-      refugioNombre: fundacion.nombre,
-      etiqueta: mascota.estadoSalud === "Saludable" ? "SALUDABLE" : "ATENCIÓN",
-      montoMensual: 25.00,
-      categoria: mascota.categoria === "perro" ? "Alimentación Canina" : "Alimentación Felina",
-      imagenUrl: mascota.imagenUrl,
+      petId: String(mascota.id),
+      name: mascota.nombre,
+      rescueName: fundacion.nombre,
+      tag: mascota.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
+      monthlyAmount: 25.00,
+      image: mascota.imagen,
     });
   };
 
   return (
     <div className="bg-white min-h-screen">
       {/* Header */}
-      <div className="relative h-[300px] overflow-hidden">
+      <div className="relative h-[200px] sm:h-[250px] md:h-[300px] overflow-hidden">
         <ImageWithFallback
           src={fundacion.portadaUrl}
           alt={fundacion.nombre}
@@ -126,7 +132,7 @@ export function FundacionDetail() {
             ) : (
               <div className="space-y-4">
                 {mascotas.map((mascota) => {
-                  const isInManada = manadaPets.some((mp) => mp.petId === mascota.id);
+                  const isInManada = manadaPets.some((mp) => mp.petId === String(mascota.id));
                   return (
                     <div
                       key={mascota.id}
@@ -134,7 +140,7 @@ export function FundacionDetail() {
                     >
                       <Link to={`/mascota/${mascota.id}`} className="w-28 h-28 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100 block">
                         <ImageWithFallback
-                          src={mascota.imagenUrl}
+                          src={mascota.imagen}
                           alt={mascota.nombre}
                           className="w-full h-full object-cover"
                         />
@@ -145,18 +151,18 @@ export function FundacionDetail() {
                           <Link to={`/mascota/${mascota.id}`} className="text-[#1b1c1c] text-lg font-semibold hover:text-[#07c4e1] transition-colors">
                             {mascota.nombre}
                           </Link>
-                          <div className="bg-[#47f6a1] text-[#0d9955] px-3 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
-                            <CheckCircle2 className="w-3 h-3 fill-[#0F9855] text-white" />
-                            {mascota.estadoSalud}
+                          <div className="bg-gray-100 text-gray-600 px-3 py-0.5 rounded-full text-xs font-medium flex items-center gap-1">
+                            <CheckCircle2 className="w-3 h-3 text-gray-400" />
+                            {statusLabel[mascota.status] || mascota.status}
                           </div>
                         </div>
 
                         <p className="text-gray-500 text-xs">
-                          {mascota.raza} · {mascota.edad} · {mascota.sexo}
+                          {mascota.raza || "Sin raza"} · {mascota.edad} {mascota.edad === 1 ? "año" : "años"} · {mascota.sexo}
                         </p>
 
                         <p className="text-[#3e494a] text-sm leading-relaxed line-clamp-2">
-                          {mascota.descripcionCorta}
+                          {mascota.descripcion}
                         </p>
 
                         <div className="flex items-center justify-between pt-2 border-t border-gray-100">

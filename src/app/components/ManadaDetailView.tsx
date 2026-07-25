@@ -11,7 +11,6 @@ export interface ApadrinadaPet {
   rescueName: string;
   tag: string;
   amount: number;
-  category: string;
   image: string;
 }
 
@@ -23,7 +22,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Refugio Almas Peludas, GYE",
       tag: "URGENT CARE",
       amount: 4.25,
-      category: "Alimentación Especial",
       image: imgMain,
     },
     {
@@ -32,7 +30,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Sunshine Rescue, AZ",
       tag: "URGENT CARE",
       amount: 4.25,
-      category: "Medical Supplies",
       image: imgJasper,
     },
     {
@@ -41,7 +38,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Sunshine Rescue, AZ",
       tag: "URGENT CARE",
       amount: 4.25,
-      category: "Medical Supplies",
       image: imgJasper,
     },
     {
@@ -50,7 +46,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Sunshine Rescue, AZ",
       tag: "URGENT CARE",
       amount: 4.25,
-      category: "Medical Supplies",
       image: imgJasper,
     }
   ],
@@ -61,7 +56,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Refugio Amigos Felinos",
       tag: "RESCUE",
       amount: 4.25,
-      category: "Alimentación",
       image: imgJasper,
     }
   ],
@@ -72,7 +66,6 @@ const defaultPetsMap: Record<string, ApadrinadaPet[]> = {
       rescueName: "Huellitas Sanas",
       tag: "HIGH PRIORITY",
       amount: 8.50,
-      category: "Tratamiento Ortopédico",
       image: imgJasper,
     }
   ]
@@ -191,11 +184,7 @@ export function ManadaDetailView() {
                     <span>{pet.rescueName}</span>
                   </div>
 
-                  <div className="pt-2 flex flex-wrap items-center justify-between gap-2 border-t border-gray-100">
-                    <span className="bg-[#e1e4d4] text-[#626659] text-xs font-medium px-3 py-1 rounded-full">
-                      {pet.category}
-                    </span>
-
+                  <div className="pt-2 flex items-center justify-end border-t border-gray-100">
                     <button
                       onClick={() => handleRemovePet(pet.id)}
                       className="text-[#004955] hover:text-red-600 text-sm font-semibold flex items-center gap-1 transition-colors"

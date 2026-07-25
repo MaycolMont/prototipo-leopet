@@ -1,20 +1,28 @@
 export interface Pet {
-  id: string;
-  name: string;
-  breed: string;
-  age: string;
-  foundation: string;
-  foundationId: string;
-  status: string;
-  description: string;
-  story: string;
-  healthStatus: { title: string; desc: string }[];
-  image: any;
-  galleryImages: any[];
-  location: string;
-  sex: string;
-  weight: string;
-  category: "perro" | "gato";
+  id: number;
+  nombre: string;
+  status: "NO_APADRINADO" | "APADRINADO" | "EN_PROCESO" | "ADOPTADO";
+  especie: string;
+  raza?: string;
+  descripcion: string;
+  imagen: string;
+  galeria?: string[];
+  fundacionId: string;
+  fundacionNombre?: string;
+  visible?: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  edad?: number;
+  peso?: number;
+  sexo?: "Macho" | "Hembra";
+  esterilizacion?: boolean | null;
+  vacunacion?: boolean | null;
+  desparasitacion?: boolean | null;
+  enfermedades?: string;
+  fechaRegistro?: string;
+  fechaRescate?: string;
+  historia?: string;
+  ubicacion?: string;
 }
 
 export interface ManadaPet {
@@ -24,7 +32,6 @@ export interface ManadaPet {
   rescueName: string;
   tag: string;
   monthlyAmount: number;
-  category: string;
   image: any;
 }
 
@@ -36,8 +43,12 @@ export interface Manada {
 
 export interface User {
   id: string;
-  name: string;
-  email: string;
+  nombre: string;
+  apellido: string;
+  correo: string;
+  cedula?: string;
+  rol: "donador" | "fundacion" | "admin";
+  estaActivo: boolean;
 }
 
 export interface Subscription {

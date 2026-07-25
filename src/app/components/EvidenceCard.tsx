@@ -55,7 +55,7 @@ export function EvidenceCard({ id, petName, foundationName, type, title, descrip
       <div className="relative h-48 bg-gray-100 overflow-hidden">
         <ImageWithFallback src={imageUrl} alt={title} className="w-full h-full object-cover" />
         <div className="absolute top-3 left-3 flex gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${type === "video" ? "bg-[#ee5871] text-white" : "bg-[#07c4e1] text-[#004955]"}`}>
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${type === "video" ? "bg-[#004955]/10 text-[#004955]" : "bg-gray-100 text-gray-600"}`}>
             {type === "video" ? "Video" : "Foto"}
           </span>
           <span className="bg-white/90 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">

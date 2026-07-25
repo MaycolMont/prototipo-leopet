@@ -111,7 +111,7 @@ export function ConfigurarManada() {
                   </div>
 
                   <p className="text-xs text-gray-500">
-                    {pet.rescueName} · <span className="font-semibold text-[#004955]">{pet.category}</span>
+                    {pet.rescueName}
                   </p>
 
                   <div className="flex items-center gap-3">
@@ -129,7 +129,7 @@ export function ConfigurarManada() {
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-xs text-gray-600">
-                    <span>Categoría: {pet.category}</span>
+                    <span></span>
                     <button
                       onClick={() => removeFromManada(pet.petId)}
                       className="text-red-500 hover:text-red-700 font-medium flex items-center gap-1 transition-colors"

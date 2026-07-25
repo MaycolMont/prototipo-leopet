@@ -1,0 +1,53 @@
+/**
+ * @type {import('../types/denuncia.js').Denuncia[]}
+ */
+export const MOCK_DENUNCIAS = [
+  {
+    id: "den-01",
+    fundacionId: "fund-01",
+    fundacionNombre: "Huellitas Felices",
+    donadorId: "usr-010",
+    donadorNombre: "Pedro José Lara Mena",
+    motivo: "Foto duplicada",
+    descripcion: "La evidencia enviada el 2026-07-18 muestra exactamente la misma imagen que la del reporte anterior (ev-1). No se evidencia un avance real en el cuidado de Pluto.",
+    fecha: "2026-07-19",
+    estado: "pendiente",
+  },
+  {
+    id: "den-02",
+    fundacionId: "fund-02",
+    fundacionNombre: "Refugio Almas Peludas",
+    donadorId: "usr-015",
+    donadorNombre: "Daniela Estefanía Castillo Ríos",
+    motivo: "Incoherencia en uso de fondos",
+    descripcion: "Llevo 4 meses apadrinando a Luna y nunca he recibido un reporte con video. La fundación indica que envía evidencias mensuales pero solo he recibido fotos genéricas que no muestran a mi mascota.",
+    pruebasUrls: [],
+    fecha: "2026-07-15",
+    estado: "investigando",
+    resolucionAdmin: undefined,
+  },
+  {
+    id: "den-03",
+    fundacionId: "fund-03",
+    fundacionNombre: "Huellitas Sanas",
+    donadorId: "usr-020",
+    donadorNombre: "Andrea Carolina Ponce Salazar",
+    motivo: "Evidencia de mala calidad",
+    descripcion: "Las fotos enviadas son de muy baja resolución y no permiten verificar el estado de Toby. Solicito que la fundación mejore la calidad de las evidencias o proporcione un video.",
+    fecha: "2026-07-12",
+    estado: "resuelta",
+    resolucionAdmin: "Se contactó a la fundación Huellitas Sanas. Se comprometieron a mejorar la calidad de las evidencias a partir del próximo mes. Se proporcionará un video como evidencia complementaria.",
+  },
+  {
+    id: "den-04",
+    fundacionId: "fund-01",
+    fundacionNombre: "Huellitas Felices",
+    donadorId: "usr-025",
+    donadorNombre: "Luis Miguel Espinoza Cárdenas",
+    motivo: "No corresponde a la mascota",
+    descripcion: "La foto enviada como evidencia de Rex no coincide con la foto de perfil de la mascota en el catálogo. Parece ser un perro diferente.",
+    fecha: "2026-07-08",
+    estado: "rechazada",
+    resolucionAdmin: "Tras revisión, se confirmó que la evidencia corresponde a Rex. La diferencia de ángulo generó la confusión. Se Solicita al donador verificar con mayor detalle antes de reportar.",
+  },
+];

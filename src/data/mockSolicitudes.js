@@ -1,0 +1,61 @@
+import imgPluto from "../imports/Catalog/7abaafcc2a09d50e0fc877db77c9c704cd360ae6.png";
+
+/**
+ * @type {import('../types/solicitudFundacion.js').SolicitudFundacion[]}
+ */
+export const MOCK_SOLICITUDES = [
+  {
+    id: "sol-01",
+    fundacionNombre: "Patitas al Rescate",
+    ruc: "1794567890004",
+    correo: "contacto@patitasrescate.org",
+    representanteLegal: "Carlos Andrés Mejía López",
+    telefono: "0963214587",
+    direccion: "Av. De los Shyris N36-42, Quito",
+    ubicacion: "Quito, Ecuador",
+    fechaSolicitud: "2026-07-10",
+    estado: "Pendiente",
+    documentosUrls: [imgPluto],
+  },
+  {
+    id: "sol-02",
+    fundacionNombre: "Manos con Patas",
+    ruc: "1795678901005",
+    correo: "info@manosconpatasec.org",
+    representanteLegal: "María del Carmen Ruiz de Valdez",
+    telefono: "0988741236",
+    direccion: "Calle Quito 12-34, Cuenca",
+    ubicacion: "Cuenca, Ecuador",
+    fechaSolicitud: "2026-07-05",
+    estado: "Pendiente",
+    documentosUrls: [imgPluto],
+  },
+  {
+    id: "sol-03",
+    fundacionNombre: "Vida Nueva Animal",
+    ruc: "1796789012006",
+    correo: "admin@vidanuevaanimal.org",
+    representanteLegal: "Roberto Carlos Paredes Ortiz",
+    telefono: "0974563218",
+    direccion: "Av. Cevallos 5-21, Ambato",
+    ubicacion: "Ambato, Ecuador",
+    fechaSolicitud: "2026-06-28",
+    estado: "Aprobada",
+    motivoRechazo: undefined,
+    documentosUrls: [imgPluto],
+  },
+  {
+    id: "sol-04",
+    fundacionNombre: "Refugio Esperanza",
+    ruc: "1797890123007",
+    correo: "refugio@esperanza.org",
+    representanteLegal: "Ana Lucía Torres Gavilanes",
+    telefono: "0991234567",
+    direccion: "Calle Bolívar 456, Loja",
+    ubicacion: "Loja, Ecuador",
+    fechaSolicitud: "2026-06-20",
+    estado: "Rechazada",
+    motivoRechazo: "Documentación incompleta: no se adjuntó el certificado de personería jurídica vigente.",
+    documentosUrls: [imgPluto],
+  },
+];

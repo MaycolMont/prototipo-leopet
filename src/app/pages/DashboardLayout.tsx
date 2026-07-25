@@ -42,7 +42,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
               : "Aún no tienes suscripciones activas"}
           </p>
 
-          <div className="flex gap-1 mt-6 bg-[#003840] rounded-xl p-1 w-fit">
+          <div className="flex gap-1 mt-6 bg-[#003840] rounded-xl p-1 w-full sm:w-fit overflow-x-auto">
             {tabs.map((tab) => {
               const isActive = tab.exact
                 ? location.pathname === tab.path
@@ -51,7 +51,7 @@ export function DashboardLayout({ children }: { children: React.ReactNode }) {
                 <Link
                   key={tab.path}
                   to={tab.path}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-2 px-3 sm:px-4 py-2 rounded-lg text-xs sm:text-sm font-medium transition-colors whitespace-nowrap ${
                     isActive
                       ? "bg-[#07c4e1] text-[#004955]"
                       : "text-white/70 hover:text-white hover:bg-white/10"

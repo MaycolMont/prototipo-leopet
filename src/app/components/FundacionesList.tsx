@@ -12,9 +12,9 @@ export function FundacionesList() {
         <div className="max-w-[1248px] mx-auto">
           <div className="flex items-center gap-4 mb-2">
             <Building2 size={32} className="text-[#004955]" />
-            <h1 className="text-[#004955] text-[40px] font-bold">Fundaciones Aliadas</h1>
+            <h1 className="text-[#004955] text-2xl sm:text-3xl md:text-[40px] font-bold">Fundaciones Aliadas</h1>
           </div>
-          <p className="text-[#3e494a] text-[18px] ml-12">
+          <p className="text-[#3e494a] text-sm sm:text-[18px] ml-0 sm:ml-12">
             Conoce las organizaciones que cuidan de nuestras mascotas apadrinadas.
           </p>
         </div>

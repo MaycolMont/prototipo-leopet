@@ -1,22 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!DOCTYPE html>
-  <html lang="es">
-    <head>
-      
-      <meta charset="UTF-8" />
-      <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-      <title>LeoPet — Apadrina, Cuida, Ama</title>
-      <meta name="description" content="Plataforma de apadrinamiento animal. Conecta padrinos con mascotas que necesitan ayuda en fundaciones de rescate." />
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-      <style>html, body { height: 100%; margin: 0; } #root { height: 100%; }</style>
-      
-    </head>
+    <title>LeoPet — Apadrina, Cuida, Ama</title>
+    <meta name="description" content="Plataforma de apadrinamiento animal. Conecta padrinos con mascotas que necesitan ayuda en fundaciones de rescate en Ecuador." />
+    <meta name="keywords" content="apadrinamiento animal, mascotas, fundaciones, rescate animal, donaciones, Ecuador, perros, gatos" />
+    <meta name="author" content="LeoPet" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://leopet.com" />
 
-    <body>
-      
-      <div id="root"></div>
-      <script type="module" src="/src/main.tsx"></script>
-      
-    </body>
-  </html>
-  
+    <meta name="theme-color" content="#004955" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="LeoPet" />
+
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="LeoPet — Apadrina, Cuida, Ama" />
+    <meta property="og:description" content="Plataforma de apadrinamiento animal. Conecta padrinos con mascotas que necesitan ayuda en fundaciones de rescate." />
+    <meta property="og:image" content="/og-image.png" />
+    <meta property="og:url" content="https://leopet.com" />
+    <meta property="og:site_name" content="LeoPet" />
+    <meta property="og:locale" content="es_EC" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="LeoPet — Apadrina, Cuida, Ama" />
+    <meta name="twitter:description" content="Plataforma de apadrinamiento animal. Conecta padrinos con mascotas que necesitan ayuda." />
+    <meta name="twitter:image" content="/og-image.png" />
+
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "LeoPet",
+      "description": "Plataforma de apadrinamiento animal que conecta padrinos con mascotas en fundaciones de rescate.",
+      "url": "https://leopet.com",
+      "logo": "https://leopet.com/favicon.svg",
+      "sameAs": [],
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+593-099-123-4568",
+        "contactType": "customer service",
+        "availableLanguage": "Spanish"
+      },
+      "areaServed": {
+        "@type": "Country",
+        "name": "Ecuador"
+      }
+    }
+    </script>
+
+    <style>
+      html, body { height: 100%; margin: 0; }
+      #root { height: 100%; }
+    </style>
+  </head>
+
+  <body>
+    <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-[100] focus:bg-[#07c4e1] focus:text-[#004955] focus:px-4 focus:py-2 focus:rounded-lg focus:font-semibold focus:shadow-lg">
+      Saltar al contenido principal
+    </a>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

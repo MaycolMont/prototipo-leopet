@@ -15,10 +15,10 @@ export function Dashboard() {
   const totalMonthly = subscriptions.reduce((acc, s) => acc + s.totalMonthly, 0);
 
   const stats = [
-    { label: "Suscripciones activas", value: activeSubs.length, icon: <CreditCard size={24} className="text-[#07c4e1]" />, color: "bg-[#07c4e1]/10" },
-    { label: "Mascotas apadrinadas", value: totalPets, icon: <PawPrint size={24} className="text-[#00626d]" />, color: "bg-[#00626d]/10" },
-    { label: "Aporte mensual", value: `$${totalMonthly.toFixed(2)}`, icon: <TrendingUp size={24} className="text-[#0d9955]" />, color: "bg-[#0d9955]/10" },
-    { label: "Manada (carrito)", value: pets.length, icon: <Heart size={24} className="text-[#ee5871]" />, color: "bg-[#ee5871]/10" },
+    { label: "Suscripciones activas", value: activeSubs.length, icon: <CreditCard size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
+    { label: "Mascotas apadrinadas", value: totalPets, icon: <PawPrint size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
+    { label: "Aporte mensual", value: `$${totalMonthly.toFixed(2)}`, icon: <TrendingUp size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
+    { label: "Manada (carrito)", value: pets.length, icon: <Heart size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
   ];
 
   return (
@@ -43,21 +43,21 @@ export function Dashboard() {
             <h3 className="text-[#004955] text-lg font-semibold mb-4">Acciones Rápidas</h3>
             <div className="space-y-3">
               <Link to="/mascotas" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                <div className="bg-[#07c4e1]/10 p-2 rounded-lg"><PawPrint size={18} className="text-[#07c4e1]" /></div>
+                <div className="bg-[#004955]/10 p-2 rounded-lg"><PawPrint size={18} className="text-[#004955]" /></div>
                 <div>
                   <p className="text-[#004955] font-medium text-sm">Explorar Mascotas</p>
                   <p className="text-gray-500 text-xs">Encuentra nuevos padrinos para tu manada</p>
                 </div>
               </Link>
               <Link to="/dashboard/evidencias" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                <div className="bg-[#0d9955]/10 p-2 rounded-lg"><TrendingUp size={18} className="text-[#0d9955]" /></div>
+                <div className="bg-[#004955]/10 p-2 rounded-lg"><TrendingUp size={18} className="text-[#004955]" /></div>
                 <div>
                   <p className="text-[#004955] font-medium text-sm">Ver Evidencias</p>
                   <p className="text-gray-500 text-xs">Califica el progreso de tus mascotas</p>
                 </div>
               </Link>
               <Link to="/dashboard/manada" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
-                <div className="bg-[#ee5871]/10 p-2 rounded-lg"><Heart size={18} className="text-[#ee5871]" /></div>
+                <div className="bg-[#004955]/10 p-2 rounded-lg"><Heart size={18} className="text-[#004955]" /></div>
                 <div>
                   <p className="text-[#004955] font-medium text-sm">Gestionar Manada</p>
                   <p className="text-gray-500 text-xs">Modifica montos y controla tus suscripciones</p>
@@ -84,7 +84,7 @@ export function Dashboard() {
                     </div>
                     <div className="text-right">
                       <p className="text-[#004955] font-bold text-sm">${sub.totalMonthly.toFixed(2)}/mes</p>
-                      <span className={`text-xs font-medium ${sub.status === "active" ? "text-[#0d9955]" : "text-[#ffac13]"}`}>
+                      <span className={`text-xs font-medium ${sub.status === "active" ? "text-[#004955]" : "text-gray-500"}`}>
                         {sub.status === "active" ? "Activa" : "Pausada"}
                       </span>
                     </div>

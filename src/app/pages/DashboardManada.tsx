@@ -38,7 +38,6 @@ export function DashboardManada() {
                   </div>
                   <div className="flex-1">
                     <p className="text-[#004955] font-medium text-sm">{pet.name}</p>
-                    <p className="text-gray-500 text-xs">{pet.category}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -93,7 +92,7 @@ export function DashboardManada() {
                     </div>
                     <div className="flex items-center gap-2">
                       <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                        sub.status === "active" ? "bg-[#47f6a1]/20 text-[#0d9955]" : "bg-[#ffac13]/20 text-[#b37d00]"
+                        sub.status === "active" ? "bg-[#004955]/10 text-[#004955]" : "bg-gray-100 text-gray-500"
                       }`}>
                         {sub.status === "active" ? "Activa" : "Pausada"}
                       </span>
@@ -129,7 +128,7 @@ export function DashboardManada() {
                       {sub.status === "active" ? (
                         <button
                           onClick={() => pauseSubscription(sub.id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#ffac13]/10 text-[#b37d00] text-xs font-medium hover:bg-[#ffac13]/20 transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-gray-100 text-gray-600 text-xs font-medium hover:bg-gray-200 transition-colors"
                         >
                           <Pause size={14} />
                           Pausar 30 días
@@ -137,7 +136,7 @@ export function DashboardManada() {
                       ) : (
                         <button
                           onClick={() => resumeSubscription(sub.id)}
-                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#0d9955]/10 text-[#0d9955] text-xs font-medium hover:bg-[#0d9955]/20 transition-colors"
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-[#004955]/10 text-[#004955] text-xs font-medium hover:bg-[#004955]/20 transition-colors"
                         >
                           <Play size={14} />
                           Reanudar
