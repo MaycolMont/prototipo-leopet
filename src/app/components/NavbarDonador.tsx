@@ -2,24 +2,27 @@ import React, { useState, useEffect, useRef } from 'react';
 import { Link, useLocation, useNavigate } from 'react-router';
 import svgPaths from "../../imports/NavbarDonador/svg-hguxyjw148";
 import { useAuth } from '../context/AuthContext';
-import { useManada } from '../context/ManadaContext';
+import { useNotifications } from '../context/NotificationContext';
 import { AuthModal } from './AuthModal';
-import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Shield, Building2 } from 'lucide-react';
+import { Menu, X, ChevronDown, LogOut, LayoutDashboard, Shield, Building2, Bell, Star, EyeOff, Check } from 'lucide-react';
 
 export function NavbarDonador() {
   const location = useLocation();
   const navigate = useNavigate();
   const isHome = location.pathname === '/';
   const { user, isAuthenticated, logout } = useAuth();
-  const { pets } = useManada();
+  const { notificaciones, noLeidas, marcarLeido, marcarTodasLeidas, calificar, ocultar } = useNotifications();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [userMenuOpen, setUserMenuOpen] = useState(false);
+  const [notifOpen, setNotifOpen] = useState(false);
   const userMenuRef = useRef<HTMLDivElement>(null);
+  const notifRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     setMobileMenuOpen(false);
     setUserMenuOpen(false);
+    setNotifOpen(false);
   }, [location.pathname]);
 
   useEffect(() => {
@@ -27,18 +30,22 @@ export function NavbarDonador() {
       if (userMenuRef.current && !userMenuRef.current.contains(e.target as Node)) {
         setUserMenuOpen(false);
       }
+      if (notifRef.current && !notifRef.current.contains(e.target as Node)) {
+        setNotifOpen(false);
+      }
     }
-    if (userMenuOpen) {
+    if (userMenuOpen || notifOpen) {
       document.addEventListener('mousedown', handleClickOutside);
       return () => document.removeEventListener('mousedown', handleClickOutside);
     }
-  }, [userMenuOpen]);
+  }, [userMenuOpen, notifOpen]);
 
   useEffect(() => {
     function handleEscape(e: KeyboardEvent) {
       if (e.key === 'Escape') {
         setUserMenuOpen(false);
         setMobileMenuOpen(false);
+        setNotifOpen(false);
       }
     }
     document.addEventListener('keydown', handleEscape);
@@ -47,6 +54,8 @@ export function NavbarDonador() {
 
   const isAdmin = user?.rol === 'admin';
   const isFoundation = user?.rol === 'fundacion';
+
+  const visibles = notificaciones.filter((n) => n.visible);
 
   return (
     <>
@@ -68,15 +77,12 @@ export function NavbarDonador() {
           </svg>
         </Link>
 
-        {/* Desktop nav links — only Mascotas + Fundaciones */}
         <div className="hidden md:flex items-center gap-2 lg:gap-4 text-white text-[15px] lg:text-[18px] font-medium font-['Host_Grotesk']">
           <Link to="/mascotas" className="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">Mascotas</Link>
           <Link to="/fundaciones" className="px-3 py-2 rounded-lg hover:bg-white/10 transition-colors">Fundaciones</Link>
         </div>
 
-        {/* Right section */}
         <div className="flex items-center gap-2 md:gap-3">
-          {/* Mobile hamburger */}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             className="md:hidden text-white p-2 rounded-lg hover:bg-white/10 transition-colors"
@@ -85,28 +91,116 @@ export function NavbarDonador() {
             {mobileMenuOpen ? <X size={22} aria-hidden="true" /> : <Menu size={22} aria-hidden="true" />}
           </button>
 
-          {/* Manada icon */}
-          <Link
-            to="/mi-manada/configurar"
-            className="relative w-9 h-9 flex items-center justify-center hover:opacity-80 transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white rounded"
-            aria-label={`Ver Mi Manada${pets.length > 0 ? ` (${pets.length} mascota${pets.length > 1 ? "s" : ""})` : ""}`}
-          >
-            <svg className="size-full" fill="none" viewBox="0 0 36 36" aria-hidden="true">
-              <path d={svgPaths.pd47b000} fill="#07C4E1" />
-              <path d={svgPaths.p21ec9b80} fill="#07C4E1" />
-              <path d={svgPaths.p21a62080} fill="#07C4E1" />
-              <path d={svgPaths.p290d7080} fill="#07C4E1" />
-              <path d={svgPaths.p3c4d8a10} fill="#07C4E1" />
-              <path d={svgPaths.p38b13200} fill="#07C4E1" />
-            </svg>
-            {pets.length > 0 && (
-              <span className="absolute -top-1 -right-1 bg-[#ee5871] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-                {pets.length}
-              </span>
-            )}
-          </Link>
+          {isAuthenticated && (
+            <div className="relative" ref={notifRef}>
+              <button
+                onClick={() => setNotifOpen(!notifOpen)}
+                className="relative w-9 h-9 flex items-center justify-center text-white hover:bg-white/10 rounded-lg transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-white"
+                aria-label={`Notificaciones${noLeidas > 0 ? ` (${noLeidas} sin leer)` : ""}`}
+                aria-expanded={notifOpen}
+              >
+                <Bell size={20} aria-hidden="true" />
+                {noLeidas > 0 && (
+                  <span className="absolute -top-1 -right-1 bg-[#ee5871] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
+                    {noLeidas}
+                  </span>
+                )}
+              </button>
 
-          {/* Auth section */}
+              {notifOpen && (
+                <div className="absolute right-0 top-full mt-2 w-80 sm:w-96 bg-white rounded-xl shadow-xl border border-gray-100 z-50 animate-in fade-in slide-in-from-top-2 duration-150 overflow-hidden">
+                  <div className="flex items-center justify-between px-4 py-3 border-b border-gray-100">
+                    <h3 className="text-[#004955] font-semibold text-sm">Notificaciones</h3>
+                    {noLeidas > 0 && (
+                      <button
+                        onClick={() => { marcarTodasLeidas(); }}
+                        className="text-[#004955] text-xs font-medium hover:underline flex items-center gap-1"
+                      >
+                        <Check size={12} />
+                        Marcar todo leído
+                      </button>
+                    )}
+                  </div>
+
+                  <div className="max-h-[400px] overflow-y-auto divide-y divide-gray-50">
+                    {visibles.length === 0 ? (
+                      <div className="py-8 text-center text-gray-400 text-sm">
+                        No tienes notificaciones
+                      </div>
+                    ) : (
+                      visibles.map((notif) => (
+                        <div
+                          key={notif.id}
+                          className={`px-4 py-3 hover:bg-gray-50 transition-colors ${!notif.leido ? "bg-[#07c4e1]/5" : ""}`}
+                        >
+                          <div className="flex items-start gap-3">
+                            <div className={`mt-0.5 w-2 h-2 rounded-full flex-shrink-0 ${notif.leido ? "bg-transparent" : "bg-[#07c4e1]"}`} />
+                            <div className="flex-1 min-w-0">
+                              {notif.es_alerta_salud && (
+                                <span className="text-[10px] font-semibold text-[#004955] uppercase tracking-wider">Alerta de salud</span>
+                              )}
+                              {notif.es_admin_mensaje && (
+                                <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Mensaje del admin</span>
+                              )}
+                              <p className="text-[#3e494a] text-xs leading-relaxed mt-0.5">
+                                {notif.mensaje || notif.descripcion_alerta}
+                              </p>
+                              <p className="text-gray-400 text-[10px] mt-1">{notif.createdAt}</p>
+
+                              {!notif.leido && (
+                                <button
+                                  onClick={() => marcarLeido(notif.id)}
+                                  className="text-[10px] text-[#004955] font-medium mt-1 hover:underline"
+                                >
+                                  Marcar como leído
+                                </button>
+                              )}
+
+                              {notif.leido && !notif.calificacion && !notif.es_alerta_salud && !notif.es_admin_mensaje && (
+                                <div className="flex items-center gap-1 mt-1.5">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <button
+                                      key={star}
+                                      onClick={() => calificar(notif.id, star)}
+                                      className="text-gray-300 hover:text-[#ffac13] transition-colors"
+                                      aria-label={`Calificar ${star} estrellas`}
+                                    >
+                                      <Star size={12} />
+                                    </button>
+                                  ))}
+                                </div>
+                              )}
+
+                              {notif.calificacion && (
+                                <div className="flex items-center gap-0.5 mt-1">
+                                  {[1, 2, 3, 4, 5].map((star) => (
+                                    <Star
+                                      key={star}
+                                      size={10}
+                                      className={star <= notif.calificacion! ? "fill-[#ffac13] text-[#ffac13]" : "text-gray-200"}
+                                    />
+                                  ))}
+                                </div>
+                              )}
+                            </div>
+
+                            <button
+                              onClick={() => ocultar(notif.id)}
+                              className="text-gray-300 hover:text-gray-500 transition-colors flex-shrink-0"
+                              aria-label="Ocultar notificación"
+                            >
+                              <EyeOff size={14} />
+                            </button>
+                          </div>
+                        </div>
+                      ))
+                    )}
+                  </div>
+                </div>
+              )}
+            </div>
+          )}
+
           {isAuthenticated ? (
             <div className="relative" ref={userMenuRef}>
               <button
@@ -202,7 +296,6 @@ export function NavbarDonador() {
         </div>
       </nav>
 
-      {/* Mobile menu overlay */}
       {mobileMenuOpen && (
         <div className="md:hidden fixed inset-0 top-[70px] z-40 bg-black/40" onClick={() => setMobileMenuOpen(false)} role="dialog" aria-label="Menú de navegación móvil">
           <div
