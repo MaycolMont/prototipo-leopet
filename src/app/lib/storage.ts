@@ -1,5 +1,6 @@
 const KEYS = {
   MANADA_CART: "leopet_manada_cart",
+  MANADA_NOMBRE: "leopet_manada_nombre",
   USER: "leopet_user",
   SUBSCRIPTIONS: "leopet_subscriptions",
   FAVORITOS: "leopet_favoritos",
@@ -23,6 +24,14 @@ export const storage = {
 
   setManadaCart: (cart: any[]) => {
     localStorage.setItem(KEYS.MANADA_CART, JSON.stringify(cart));
+  },
+
+  getManadaNombre: (): string | null => {
+    return localStorage.getItem(KEYS.MANADA_NOMBRE);
+  },
+
+  setManadaNombre: (nombre: string) => {
+    localStorage.setItem(KEYS.MANADA_NOMBRE, nombre);
   },
 
   getUser: (): any | null => {

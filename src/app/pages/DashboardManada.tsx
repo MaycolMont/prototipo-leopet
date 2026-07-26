@@ -8,7 +8,7 @@ import { DashboardLayout } from './DashboardLayout';
 
 export function DashboardManada() {
   const { subscriptions, pauseSubscription, resumeSubscription, cancelSubscription, removePetFromSubscription, updatePetAmountInSubscription } = useSubscriptions();
-  const { pets, updatePetAmount, removeFromManada, totalMonthly } = useManada();
+  const { mascotas, updateAnimalAmount, removeFromManada, totalMonthly } = useManada();
   const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
   const [editingPet, setEditingPet] = useState<{ subId: string; petId: string } | null>(null);
   const [editAmount, setEditAmount] = useState(0);
@@ -35,7 +35,7 @@ export function DashboardManada() {
           </p>
         </div>
 
-        {pets.length > 0 && (
+        {mascotas.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#BDC8CA]/40 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
               <h3 className="text-[#004955] text-lg font-semibold">Manada Pendiente de Pago</h3>
@@ -44,13 +44,13 @@ export function DashboardManada() {
               </Link>
             </div>
             <div className="space-y-3">
-              {pets.map((pet) => (
-                <div key={pet.petId} className="flex items-center gap-4 p-3 rounded-xl bg-gray-50">
+              {mascotas.map((animal) => (
+                <div key={animal.animalId} className="flex items-center gap-4 p-3 rounded-xl bg-gray-50">
                   <div className="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0">
-                    <ImageWithFallback src={pet.image} alt={pet.name} className="w-full h-full object-cover" />
+                    <ImageWithFallback src={animal.imagenUrl} alt={animal.nombre} className="w-full h-full object-cover" />
                   </div>
                   <div className="flex-1">
-                    <p className="text-[#004955] font-medium text-sm">{pet.name}</p>
+                    <p className="text-[#004955] font-medium text-sm">{animal.nombre}</p>
                   </div>
                   <div className="flex items-center gap-2">
                     <input
@@ -58,13 +58,13 @@ export function DashboardManada() {
                       min={5}
                       max={100}
                       step={5}
-                      value={pet.monthlyAmount}
-                      onChange={(e) => updatePetAmount(pet.petId, Number(e.target.value))}
+                      value={animal.montoMensual}
+                      onChange={(e) => updateAnimalAmount(animal.animalId, Number(e.target.value))}
                       className="w-20 px-2 py-1 border border-gray-200 rounded-lg text-sm text-center focus:ring-2 focus:ring-[#07c4e1] outline-none"
                     />
                     <span className="text-xs text-gray-500">/mes</span>
                     <button
-                      onClick={() => removeFromManada(pet.petId)}
+                      onClick={() => removeFromManada(animal.animalId)}
                       className="text-red-400 hover:text-red-600 p-1 transition-colors"
                     >
                       <Trash2 size={16} />

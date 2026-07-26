@@ -9,12 +9,12 @@ import { MOCK_PETS } from '../lib/mockData';
 export function PetDetail() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { addToManada, pets: manadaPets } = useManada();
+  const { addToManada, mascotas: manadaMascotas } = useManada();
   const [added, setAdded] = useState(false);
 
   const pet = MOCK_PETS.find((p) => p.id === Number(id)) || MOCK_PETS[0];
 
-  const isInManada = manadaPets.some((mp) => mp.petId === String(pet.id));
+  const isInManada = manadaMascotas.some((a) => a.animalId === String(pet.id));
 
   const statusDisplay = pet.status === "NO_APADRINADO" ? "Disponible" : pet.status === "APADRINADO" ? "Apadrinado" : pet.status === "EN_PROCESO" ? "En Proceso" : "Adoptado";
 
@@ -24,13 +24,14 @@ export function PetDetail() {
       return;
     }
     addToManada({
-      id: `manada-${pet.id}`,
-      petId: String(pet.id),
-      name: pet.nombre,
-      rescueName: pet.fundacionNombre || "",
-      tag: pet.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
-      monthlyAmount: 25.00,
-      image: pet.imagen,
+      id: `manada-animal-${pet.id}`,
+      manadaId: "temp",
+      animalId: String(pet.id),
+      montoMensual: 25.00,
+      nombre: pet.nombre,
+      refugioNombre: pet.fundacionNombre || "",
+      etiqueta: pet.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
+      imagenUrl: pet.imagen,
     });
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);

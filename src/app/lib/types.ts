@@ -25,20 +25,28 @@ export interface Pet {
   ubicacion?: string;
 }
 
-export interface ManadaPet {
+export interface ManadaAnimal {
   id: string;
-  petId: string;
-  name: string;
-  rescueName: string;
-  tag: string;
-  monthlyAmount: number;
-  image: any;
+  manadaId: string;
+  animalId: string;
+  montoMensual: number;
+  nombre?: string;
+  refugioNombre?: string;
+  etiqueta?: string;
+  imagenUrl?: any;
 }
 
 export interface Manada {
   id: string;
-  name: string;
-  pets: ManadaPet[];
+  nombre: string;
+  monto: number;
+  userId: string;
+  status: boolean;
+  statusSubscription: boolean;
+  mascotas: ManadaAnimal[];
+  galeriamanada?: string[];
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface User {

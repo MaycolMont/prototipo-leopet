@@ -16,7 +16,7 @@ const statusLabel: Record<string, string> = {
 
 export function FundacionDetail() {
   const { id } = useParams<{ id: string }>();
-  const { addToManada, pets: manadaPets } = useManada();
+  const { addToManada, mascotas: manadaMascotas } = useManada();
   const { isFavorito, toggleFavorito } = useFavoritos();
 
   const fundacion = MOCK_FUNDACIONES.find((f) => f.id === id) || MOCK_FUNDACIONES[0];
@@ -24,15 +24,16 @@ export function FundacionDetail() {
   const favorita = isFavorito(fundacion.id);
 
   const handleApadrinar = (mascota: typeof MOCK_MASCOTAS[0]) => {
-    if (manadaPets.some((mp) => mp.petId === String(mascota.id))) return;
+    if (manadaMascotas.some((a) => a.animalId === String(mascota.id))) return;
     addToManada({
-      id: `manada-${mascota.id}`,
-      petId: String(mascota.id),
-      name: mascota.nombre,
-      rescueName: fundacion.nombre,
-      tag: mascota.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
-      monthlyAmount: 25.00,
-      image: mascota.imagen,
+      id: `manada-animal-${mascota.id}`,
+      manadaId: "temp",
+      animalId: String(mascota.id),
+      montoMensual: 25.00,
+      nombre: mascota.nombre,
+      refugioNombre: fundacion.nombre,
+      etiqueta: mascota.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
+      imagenUrl: mascota.imagen,
     });
   };
 

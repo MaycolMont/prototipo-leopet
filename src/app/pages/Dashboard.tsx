@@ -2,13 +2,11 @@ import React from 'react';
 import { Link } from 'react-router';
 import { PawPrint, Heart, TrendingUp, Calendar, CreditCard, AlertCircle, Building2 } from 'lucide-react';
 import { useSubscriptions } from '../context/SubscriptionContext';
-import { useManada } from '../context/ManadaContext';
 import { useFavoritos } from '../context/FavoritosContext';
 import { DashboardLayout } from './DashboardLayout';
 
 export function Dashboard() {
   const { subscriptions } = useSubscriptions();
-  const { pets } = useManada();
   const { favoritos } = useFavoritos();
 
   const activeSubs = subscriptions.filter((s) => s.status === "active");

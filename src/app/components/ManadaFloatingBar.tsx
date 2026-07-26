@@ -4,9 +4,9 @@ import { Heart, ChevronRight } from "lucide-react";
 import { useManada } from "../context/ManadaContext";
 
 export function ManadaFloatingBar() {
-  const { pets } = useManada();
+  const { mascotas } = useManada();
 
-  if (pets.length === 0) return null;
+  if (mascotas.length === 0) return null;
 
   return (
     <div className="fixed bottom-6 right-6 z-50 animate-in fade-in slide-in-from-bottom-4 duration-300">
@@ -17,7 +17,7 @@ export function ManadaFloatingBar() {
         <div className="relative">
           <Heart size={22} className="text-[#07c4e1]" />
           <span className="absolute -top-2 -right-2 bg-[#ee5871] text-white text-[10px] font-bold w-5 h-5 rounded-full flex items-center justify-center">
-            {pets.length}
+            {mascotas.length}
           </span>
         </div>
         <span className="font-medium text-sm hidden sm:inline">Ver mi Manada</span>

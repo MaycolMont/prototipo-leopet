@@ -1,12 +1,14 @@
 import React, { createContext, useContext, useState, useCallback, type ReactNode } from "react";
 import { storage } from "../lib/storage";
-import type { ManadaPet } from "../lib/types";
+import type { ManadaAnimal } from "../lib/types";
 
 interface ManadaContextType {
-  pets: ManadaPet[];
-  addToManada: (pet: ManadaPet) => void;
-  removeFromManada: (petId: string) => void;
-  updatePetAmount: (petId: string, amount: number) => void;
+  mascotas: ManadaAnimal[];
+  nombre: string;
+  setNombre: (name: string) => void;
+  addToManada: (animal: ManadaAnimal) => void;
+  removeFromManada: (animalId: string) => void;
+  updateAnimalAmount: (animalId: string, amount: number) => void;
   clearManada: () => void;
   totalMonthly: number;
 }
@@ -14,46 +16,54 @@ interface ManadaContextType {
 const ManadaContext = createContext<ManadaContextType | null>(null);
 
 export function ManadaProvider({ children }: { children: ReactNode }) {
-  const [pets, setPets] = useState<ManadaPet[]>(() => storage.getManadaCart());
+  const [mascotas, setMascotas] = useState<ManadaAnimal[]>(() => storage.getManadaCart());
+  const [nombre, setNombreState] = useState<string>(() => storage.getManadaNombre() || "Mi Manada");
 
-  const persist = (updated: ManadaPet[]) => {
-    setPets(updated);
+  const persistMascotas = (updated: ManadaAnimal[]) => {
+    setMascotas(updated);
     storage.setManadaCart(updated);
   };
 
-  const addToManada = useCallback((pet: ManadaPet) => {
-    setPets((prev) => {
-      if (prev.some((p) => p.petId === pet.petId)) return prev;
-      const updated = [...prev, pet];
+  const setNombre = useCallback((name: string) => {
+    setNombreState(name);
+    storage.setManadaNombre(name);
+  }, []);
+
+  const addToManada = useCallback((animal: ManadaAnimal) => {
+    setMascotas((prev) => {
+      if (prev.some((a) => a.animalId === animal.animalId)) return prev;
+      const updated = [...prev, animal];
       storage.setManadaCart(updated);
       return updated;
     });
   }, []);
 
-  const removeFromManada = useCallback((petId: string) => {
-    setPets((prev) => {
-      const updated = prev.filter((p) => p.petId !== petId);
+  const removeFromManada = useCallback((animalId: string) => {
+    setMascotas((prev) => {
+      const updated = prev.filter((a) => a.animalId !== animalId);
       storage.setManadaCart(updated);
       return updated;
     });
   }, []);
 
-  const updatePetAmount = useCallback((petId: string, amount: number) => {
-    setPets((prev) => {
-      const updated = prev.map((p) => (p.petId === petId ? { ...p, monthlyAmount: amount } : p));
+  const updateAnimalAmount = useCallback((animalId: string, amount: number) => {
+    setMascotas((prev) => {
+      const updated = prev.map((a) => (a.animalId === animalId ? { ...a, montoMensual: amount } : a));
       storage.setManadaCart(updated);
       return updated;
     });
   }, []);
 
   const clearManada = useCallback(() => {
-    persist([]);
+    persistMascotas([]);
+    setNombreState("Mi Manada");
+    storage.setManadaNombre("Mi Manada");
   }, []);
 
-  const totalMonthly = pets.reduce((acc, p) => acc + p.monthlyAmount, 0);
+  const totalMonthly = mascotas.reduce((acc, a) => acc + a.montoMensual, 0);
 
   return (
-    <ManadaContext.Provider value={{ pets, addToManada, removeFromManada, updatePetAmount, clearManada, totalMonthly }}>
+    <ManadaContext.Provider value={{ mascotas, nombre, setNombre, addToManada, removeFromManada, updateAnimalAmount, clearManada, totalMonthly }}>
       {children}
     </ManadaContext.Provider>
   );

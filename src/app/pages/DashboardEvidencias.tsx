@@ -9,11 +9,11 @@ import { PawPrint, Heart } from 'lucide-react';
 
 export function DashboardEvidencias() {
   const { isAuthenticated } = useAuth();
-  const { pets } = useManada();
+  const { mascotas } = useManada();
   const { favoritos } = useFavoritos();
   const [tab, setTab] = useState<"apadrinados" | "favoritas">("apadrinados");
 
-  const sponsoredIds = new Set(pets.map((p) => p.petId));
+  const sponsoredIds = new Set(mascotas.map((a) => a.animalId));
 
   const misApadrinados = MOCK_EVIDENCE.filter((ev) => sponsoredIds.has(ev.mascotaId));
   const deFavoritas = MOCK_EVIDENCE.filter(

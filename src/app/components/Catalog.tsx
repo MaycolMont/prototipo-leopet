@@ -102,7 +102,7 @@ function Pagination({ page, totalPages, onPageChange }: { page: number; totalPag
 
 export function Catalog() {
   const navigate = useNavigate();
-  const { addToManada, pets: manadaPets } = useManada();
+  const { addToManada, mascotas: manadaMascotas } = useManada();
   const [filter, setFilter] = useState<"todos" | "Perro" | "Gato">("todos");
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortMode>("recomendado");
@@ -140,18 +140,19 @@ export function Catalog() {
   const resetPage = () => setPage(1);
 
   const handleApadrinar = (pet: ScoredPet) => {
-    if (manadaPets.some((mp) => mp.petId === String(pet.id))) {
+    if (manadaMascotas.some((a) => a.animalId === String(pet.id))) {
       navigate("/mi-manada/configurar");
       return;
     }
     addToManada({
-      id: `manada-${pet.id}`,
-      petId: String(pet.id),
-      name: pet.nombre,
-      rescueName: pet.fundacionNombre || "",
-      tag: pet.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
-      monthlyAmount: 25.00,
-      image: pet.imagen,
+      id: `manada-animal-${pet.id}`,
+      manadaId: "temp",
+      animalId: String(pet.id),
+      montoMensual: 25.00,
+      nombre: pet.nombre,
+      refugioNombre: pet.fundacionNombre || "",
+      etiqueta: pet.status === "NO_APADRINADO" ? "SALUDABLE" : "ATENCIÓN",
+      imagenUrl: pet.imagen,
     });
     setAddedId(pet.id);
     setTimeout(() => setAddedId(null), 2000);

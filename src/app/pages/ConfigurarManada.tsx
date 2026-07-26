@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { ArrowLeft, Trash2, Heart, CreditCard, Lock, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, Trash2, Heart, CreditCard, Lock, CheckCircle2, Edit3 } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { useManada } from '../context/ManadaContext';
 import { useAuth } from '../context/AuthContext';
@@ -10,12 +10,13 @@ import { PayPalCheckout } from '../components/PayPalCheckout';
 
 export function ConfigurarManada() {
   const navigate = useNavigate();
-  const { pets, removeFromManada, updatePetAmount, totalMonthly, clearManada } = useManada();
+  const { mascotas, removeFromManada, updateAnimalAmount, totalMonthly, clearManada, nombre, setNombre } = useManada();
   const { isAuthenticated } = useAuth();
   const { addSubscription } = useSubscriptions();
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [showPayPal, setShowPayPal] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+  const [editingName, setEditingName] = useState(false);
 
   const handleConfirm = () => {
     if (!isAuthenticated) {
@@ -30,7 +31,7 @@ export function ConfigurarManada() {
       id: `sub-${Date.now()}`,
       userId: "user-1",
       manadaId: "mi-manada",
-      pets: pets.map((p) => ({ petId: p.petId, name: p.name, monthlyAmount: p.monthlyAmount, image: p.image })),
+      pets: mascotas.map((a) => ({ petId: a.animalId, name: a.nombre || "", monthlyAmount: a.montoMensual, image: a.imagenUrl })),
       totalMonthly,
       status: "active",
       createdAt: new Date().toISOString(),
@@ -51,7 +52,7 @@ export function ConfigurarManada() {
           <p className="text-[#3e494a] text-base leading-relaxed">
             Gracias por convertirte en padrino. Has iniciado el apadrinamiento para{" "}
             <span className="font-semibold text-[#004955]">
-              {pets.map((p) => p.name).join(", ")}
+              {mascotas.map((a) => a.nombre).join(", ")}
             </span>. Recibirás reportes mensuales del progreso y salud.
           </p>
           <div className="pt-4 flex flex-col gap-3">
@@ -84,11 +85,45 @@ export function ConfigurarManada() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         <div className="lg:col-span-7 space-y-4">
+          {/* Manada name */}
+          <div className="bg-white border border-[#BDC8CA]/40 rounded-2xl p-5 shadow-sm mb-4">
+            <label className="text-xs font-medium text-gray-500 uppercase tracking-wide block mb-1">Nombre de tu manada</label>
+            {editingName ? (
+              <div className="flex items-center gap-2">
+                <input
+                  type="text"
+                  value={nombre}
+                  onChange={(e) => setNombre(e.target.value)}
+                  className="flex-1 px-3 py-2 border border-[#07c4e1] rounded-xl text-[#004955] font-medium focus:ring-2 focus:ring-[#07c4e1] outline-none"
+                  autoFocus
+                  maxLength={40}
+                />
+                <button
+                  onClick={() => setEditingName(false)}
+                  className="text-[#004955] hover:text-[#00626d] p-2"
+                >
+                  <CheckCircle2 size={18} />
+                </button>
+              </div>
+            ) : (
+              <div className="flex items-center gap-2">
+                <span className="text-[#004955] font-semibold text-lg">{nombre}</span>
+                <button
+                  onClick={() => setEditingName(true)}
+                  className="text-gray-400 hover:text-[#004955] p-1 transition-colors"
+                  title="Editar nombre"
+                >
+                  <Edit3 size={14} />
+                </button>
+              </div>
+            )}
+          </div>
+
           <h2 className="text-[#004955] text-xl font-semibold mb-4">
-            Mascotas en tu manada ({pets.length})
+            Mascotas en tu manada ({mascotas.length})
           </h2>
 
-          {pets.length === 0 ? (
+          {mascotas.length === 0 ? (
             <div className="bg-gray-50 border border-dashed border-gray-300 rounded-2xl p-10 text-center">
               <Heart size={40} className="mx-auto text-gray-300 mb-3" />
               <p className="text-gray-600 font-medium">Tu manada está vacía</p>
@@ -97,22 +132,22 @@ export function ConfigurarManada() {
               </Link>
             </div>
           ) : (
-            pets.map((pet) => (
-              <div key={pet.petId} className="bg-white border border-[#BDC8CA]/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5 shadow-sm">
+            mascotas.map((animal) => (
+              <div key={animal.animalId} className="bg-white border border-[#BDC8CA]/40 rounded-2xl p-5 flex flex-col sm:flex-row items-center gap-5 shadow-sm">
                 <div className="w-24 h-24 rounded-xl overflow-hidden flex-shrink-0 bg-gray-100">
-                  <ImageWithFallback src={pet.image} alt={pet.name} className="w-full h-full object-cover" />
+                  <ImageWithFallback src={animal.imagenUrl} alt={animal.nombre} className="w-full h-full object-cover" />
                 </div>
 
                 <div className="flex-1 w-full space-y-3">
                   <div className="flex items-center justify-between">
-                    <h3 className="text-[#1b1c1c] text-xl font-semibold">{pet.name}</h3>
+                    <h3 className="text-[#1b1c1c] text-xl font-semibold">{animal.nombre}</h3>
                     <span className="text-[#004955] font-bold text-lg">
-                      ${pet.monthlyAmount.toFixed(2)} / mes
+                      ${animal.montoMensual.toFixed(2)} / mes
                     </span>
                   </div>
 
                   <p className="text-xs text-gray-500">
-                    {pet.rescueName}
+                    {animal.refugioNombre}
                   </p>
 
                   <div className="flex items-center gap-3">
@@ -122,17 +157,17 @@ export function ConfigurarManada() {
                       min={5}
                       max={100}
                       step={5}
-                      value={pet.monthlyAmount}
-                      onChange={(e) => updatePetAmount(pet.petId, Number(e.target.value))}
+                      value={animal.montoMensual}
+                      onChange={(e) => updateAnimalAmount(animal.animalId, Number(e.target.value))}
                       className="flex-1 h-2 bg-gray-200 rounded-full appearance-none cursor-pointer accent-[#07c4e1]"
                     />
-                    <span className="text-sm font-bold text-[#004955] w-16 text-right">${pet.monthlyAmount.toFixed(2)}</span>
+                    <span className="text-sm font-bold text-[#004955] w-16 text-right">${animal.montoMensual.toFixed(2)}</span>
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-gray-100 text-xs text-gray-600">
-                    <span></span>
+                    <span>{animal.etiqueta && <span className="px-2 py-0.5 rounded-full bg-[#004955]/10 text-[#004955] text-[10px] font-semibold">{animal.etiqueta}</span>}</span>
                     <button
-                      onClick={() => removeFromManada(pet.petId)}
+                      onClick={() => removeFromManada(animal.animalId)}
                       className="text-red-500 hover:text-red-700 font-medium flex items-center gap-1 transition-colors"
                     >
                       <Trash2 size={14} />
@@ -153,8 +188,12 @@ export function ConfigurarManada() {
 
             <div className="space-y-2 text-sm">
               <div className="flex justify-between text-gray-600">
+                <span>Manada:</span>
+                <span className="font-semibold text-[#004955]">{nombre}</span>
+              </div>
+              <div className="flex justify-between text-gray-600">
                 <span>Mascotas:</span>
-                <span className="font-semibold text-[#004955]">{pets.length}</span>
+                <span className="font-semibold text-[#004955]">{mascotas.length}</span>
               </div>
               <div className="flex justify-between text-gray-600">
                 <span>Frecuencia:</span>
@@ -180,9 +219,9 @@ export function ConfigurarManada() {
             ) : (
               <button
                 onClick={handleConfirm}
-                disabled={pets.length === 0}
+                disabled={mascotas.length === 0}
                 className={`w-full font-medium text-lg py-3.5 rounded-full transition-all flex items-center justify-center gap-2 shadow-md ${
-                  pets.length > 0
+                  mascotas.length > 0
                     ? "bg-[#07c4e1] hover:bg-[#06aec8] text-[#004955] cursor-pointer"
                     : "bg-gray-200 text-gray-400 cursor-not-allowed"
                 }`}
