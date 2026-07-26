@@ -10,7 +10,7 @@ import { PayPalCheckout } from '../components/PayPalCheckout';
 
 export function ConfigurarManada() {
   const navigate = useNavigate();
-  const { pets, removeFromManada, updatePetAmount, totalMonthly } = useManada();
+  const { pets, removeFromManada, updatePetAmount, totalMonthly, clearManada } = useManada();
   const { isAuthenticated } = useAuth();
   const { addSubscription } = useSubscriptions();
   const [showAuthModal, setShowAuthModal] = useState(false);
@@ -35,6 +35,7 @@ export function ConfigurarManada() {
       status: "active",
       createdAt: new Date().toISOString(),
     });
+    clearManada();
     setIsSuccess(true);
     setShowPayPal(false);
   };

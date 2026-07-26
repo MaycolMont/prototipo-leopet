@@ -1,15 +1,29 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router';
-import { Trash2, Pause, Play, CreditCard, AlertCircle, PawPrint } from 'lucide-react';
+import { Trash2, Pause, Play, CreditCard, AlertCircle, PawPrint, X, Pencil, Check } from 'lucide-react';
 import { ImageWithFallback } from '../components/figma/ImageWithFallback';
 import { useSubscriptions } from '../context/SubscriptionContext';
 import { useManada } from '../context/ManadaContext';
 import { DashboardLayout } from './DashboardLayout';
 
 export function DashboardManada() {
-  const { subscriptions, pauseSubscription, resumeSubscription, removePetFromSubscription } = useSubscriptions();
+  const { subscriptions, pauseSubscription, resumeSubscription, cancelSubscription, removePetFromSubscription, updatePetAmountInSubscription } = useSubscriptions();
   const { pets, updatePetAmount, removeFromManada, totalMonthly } = useManada();
-  const [confirmDelete, setConfirmDelete] = useState<string | null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<string | null>(null);
+  const [editingPet, setEditingPet] = useState<{ subId: string; petId: string } | null>(null);
+  const [editAmount, setEditAmount] = useState(0);
+
+  const startEdit = (subId: string, petId: string, currentAmount: number) => {
+    setEditingPet({ subId, petId });
+    setEditAmount(currentAmount);
+  };
+
+  const saveEdit = () => {
+    if (editingPet) {
+      updatePetAmountInSubscription(editingPet.subId, editingPet.petId, editAmount);
+      setEditingPet(null);
+    }
+  };
 
   return (
     <DashboardLayout>
@@ -21,7 +35,6 @@ export function DashboardManada() {
           </p>
         </div>
 
-        {/* Pending Manada (cart) */}
         {pets.length > 0 && (
           <div className="bg-white rounded-2xl border border-[#BDC8CA]/40 p-6 shadow-sm">
             <div className="flex items-center justify-between mb-4">
@@ -67,7 +80,6 @@ export function DashboardManada() {
           </div>
         )}
 
-        {/* Active Subscriptions */}
         <div className="bg-white rounded-2xl border border-[#BDC8CA]/40 p-6 shadow-sm">
           <h3 className="text-[#004955] text-lg font-semibold mb-4">Suscripciones Activas</h3>
 
@@ -100,24 +112,57 @@ export function DashboardManada() {
                   </div>
 
                   <div className="space-y-2">
-                    {sub.pets.map((pet) => (
-                      <div key={pet.petId} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50">
-                        <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
-                          <ImageWithFallback src={pet.image} alt={pet.name} className="w-full h-full object-cover" />
+                    {sub.pets.map((pet) => {
+                      const isEditing = editingPet?.subId === sub.id && editingPet?.petId === pet.petId;
+                      return (
+                        <div key={pet.petId} className="flex items-center gap-3 p-2 rounded-lg bg-gray-50">
+                          <div className="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0">
+                            <ImageWithFallback src={pet.image} alt={pet.name} className="w-full h-full object-cover" />
+                          </div>
+                          <div className="flex-1">
+                            <p className="text-sm font-medium text-[#004955]">{pet.name}</p>
+                          </div>
+                          {isEditing ? (
+                            <div className="flex items-center gap-1">
+                              <input
+                                type="number"
+                                min={5}
+                                max={100}
+                                step={5}
+                                value={editAmount}
+                                onChange={(e) => setEditAmount(Number(e.target.value))}
+                                className="w-20 px-2 py-1 border border-[#07c4e1] rounded-lg text-sm text-center focus:ring-2 focus:ring-[#07c4e1] outline-none"
+                                autoFocus
+                              />
+                              <button onClick={saveEdit} className="text-[#004955] hover:text-[#00626d] p-1">
+                                <Check size={14} />
+                              </button>
+                              <button onClick={() => setEditingPet(null)} className="text-gray-400 hover:text-gray-600 p-1">
+                                <X size={14} />
+                              </button>
+                            </div>
+                          ) : (
+                            <div className="flex items-center gap-1">
+                              <span className="text-sm font-bold text-[#004955]">${pet.monthlyAmount.toFixed(2)}/mes</span>
+                              <button
+                                onClick={() => startEdit(sub.id, pet.petId, pet.monthlyAmount)}
+                                className="text-gray-400 hover:text-[#004955] p-1 transition-colors"
+                                title="Editar monto"
+                              >
+                                <Pencil size={12} />
+                              </button>
+                            </div>
+                          )}
+                          <button
+                            onClick={() => removePetFromSubscription(sub.id, pet.petId)}
+                            className="text-red-400 hover:text-red-600 p-1 transition-colors"
+                            title="Eliminar de suscripción"
+                          >
+                            <Trash2 size={14} />
+                          </button>
                         </div>
-                        <div className="flex-1">
-                          <p className="text-sm font-medium text-[#004955]">{pet.name}</p>
-                        </div>
-                        <span className="text-sm font-bold text-[#004955]">${pet.monthlyAmount.toFixed(2)}/mes</span>
-                        <button
-                          onClick={() => removePetFromSubscription(sub.id, pet.petId)}
-                          className="text-red-400 hover:text-red-600 p-1 transition-colors"
-                          title="Eliminar de suscripción"
-                        >
-                          <Trash2 size={14} />
-                        </button>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
 
                   <div className="flex items-center justify-between pt-2 border-t border-gray-100">
@@ -140,6 +185,31 @@ export function DashboardManada() {
                         >
                           <Play size={14} />
                           Reanudar
+                        </button>
+                      )}
+                      {confirmCancel === sub.id ? (
+                        <div className="flex items-center gap-1">
+                          <span className="text-xs text-red-500 font-medium">¿Cancelar?</span>
+                          <button
+                            onClick={() => { cancelSubscription(sub.id); setConfirmCancel(null); }}
+                            className="px-2 py-1 rounded-lg bg-red-500 text-white text-xs font-medium hover:bg-red-600 transition-colors"
+                          >
+                            Sí
+                          </button>
+                          <button
+                            onClick={() => setConfirmCancel(null)}
+                            className="px-2 py-1 rounded-lg bg-gray-200 text-gray-600 text-xs font-medium hover:bg-gray-300 transition-colors"
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <button
+                          onClick={() => setConfirmCancel(sub.id)}
+                          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-red-50 text-red-500 text-xs font-medium hover:bg-red-100 transition-colors"
+                        >
+                          <X size={14} />
+                          Cancelar
                         </button>
                       )}
                     </div>

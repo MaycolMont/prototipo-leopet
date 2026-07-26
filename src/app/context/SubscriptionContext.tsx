@@ -7,7 +7,9 @@ interface SubscriptionContextType {
   addSubscription: (sub: Subscription) => void;
   pauseSubscription: (subId: string) => void;
   resumeSubscription: (subId: string) => void;
+  cancelSubscription: (subId: string) => void;
   removePetFromSubscription: (subId: string, petId: string) => void;
+  updatePetAmountInSubscription: (subId: string, petId: string, amount: number) => void;
   getActiveSubscriptions: () => Subscription[];
 }
 
@@ -59,12 +61,32 @@ export function SubscriptionProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
+  const cancelSubscription = useCallback((subId: string) => {
+    setSubscriptions((prev) => {
+      const updated = prev.filter((s) => s.id !== subId);
+      storage.setSubscriptions(updated);
+      return updated;
+    });
+  }, []);
+
+  const updatePetAmountInSubscription = useCallback((subId: string, petId: string, amount: number) => {
+    setSubscriptions((prev) => {
+      const updated = prev.map((s) => {
+        if (s.id !== subId) return s;
+        const newPets = s.pets.map((p) => (p.petId === petId ? { ...p, monthlyAmount: amount } : p));
+        return { ...s, pets: newPets, totalMonthly: newPets.reduce((a, p) => a + p.monthlyAmount, 0) };
+      });
+      storage.setSubscriptions(updated);
+      return updated;
+    });
+  }, []);
+
   const getActiveSubscriptions = useCallback(() => {
     return subscriptions.filter((s) => s.status === "active");
   }, [subscriptions]);
 
   return (
-    <SubscriptionContext.Provider value={{ subscriptions, addSubscription, pauseSubscription, resumeSubscription, removePetFromSubscription, getActiveSubscriptions }}>
+    <SubscriptionContext.Provider value={{ subscriptions, addSubscription, pauseSubscription, resumeSubscription, cancelSubscription, removePetFromSubscription, updatePetAmountInSubscription, getActiveSubscriptions }}>
       {children}
     </SubscriptionContext.Provider>
   );
