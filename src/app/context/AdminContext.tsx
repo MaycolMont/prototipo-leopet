@@ -7,7 +7,7 @@ interface AdminContextType {
   solicitudes: typeof MOCK_SOLICITUDES;
   denuncias: typeof MOCK_DENUNCIAS;
   updateSolicitud: (id: string, updates: Partial<typeof MOCK_SOLICITUDES[0]>) => void;
-  updateDenuncia: (id: string, updates: Partial<typeof MOCK_DENUNCIAS[0]>) => void;
+  updateDenuncia: (id: number, updates: Partial<typeof MOCK_DENUNCIAS[0]>) => void;
 }
 
 const AdminContext = createContext<AdminContextType | null>(null);
@@ -31,7 +31,7 @@ export function AdminProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const updateDenuncia = useCallback((id: string, updates: Partial<typeof MOCK_DENUNCIAS[0]>) => {
+  const updateDenuncia = useCallback((id: number, updates: Partial<typeof MOCK_DENUNCIAS[0]>) => {
     setDenuncias((prev) => {
       const updated = prev.map((d) => (d.id === id ? { ...d, ...updates } : d));
       storage.setDenuncias(updated);

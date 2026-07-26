@@ -10,7 +10,7 @@ export function AdminDashboard() {
   const pendientes = solicitudes.filter((s) => s.estado === "Pendiente").length;
   const aprobadas = solicitudes.filter((s) => s.estado === "Aprobada").length;
   const rechazadas = solicitudes.filter((s) => s.estado === "Rechazada").length;
-  const denunciasAbiertas = denuncias.filter((d) => d.estado === "pendiente" || d.estado === "investigando").length;
+  const denunciasAbiertas = denuncias.filter((d) => d.estado === "pendiente" || d.estado === "notificada").length;
   const denunciasResueltas = denuncias.filter((d) => d.estado === "resuelta").length;
 
   const stats = [
