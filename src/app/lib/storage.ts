@@ -2,7 +2,6 @@ const KEYS = {
   MANADA_CART: "leopet_manada_cart",
   USER: "leopet_user",
   SUBSCRIPTIONS: "leopet_subscriptions",
-  EVIDENCE_RATINGS: "leopet_evidence_ratings",
   ADMIN_SOLICITUDES: "leopet_admin_solicitudes",
   ADMIN_DENUNCIAS: "leopet_admin_denuncias",
   FOUNDATION_MASCOTAS: "leopet_fundacion_mascotas",
@@ -53,19 +52,6 @@ export const storage = {
 
   setSubscriptions: (subs: any[]) => {
     localStorage.setItem(KEYS.SUBSCRIPTIONS, JSON.stringify(subs));
-  },
-
-  getEvidenceRatings: (): Record<string, { rating: number; comment?: string }> => {
-    try {
-      const data = localStorage.getItem(KEYS.EVIDENCE_RATINGS);
-      return data ? JSON.parse(data) : {};
-    } catch {
-      return {};
-    }
-  },
-
-  setEvidenceRatings: (ratings: Record<string, { rating: number; comment?: string }>) => {
-    localStorage.setItem(KEYS.EVIDENCE_RATINGS, JSON.stringify(ratings));
   },
 
   getSolicitudes: (): any[] => {

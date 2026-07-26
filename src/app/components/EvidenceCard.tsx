@@ -4,40 +4,55 @@ import { ImageWithFallback } from "./figma/ImageWithFallback";
 
 interface EvidenceCardProps {
   id: string;
-  petName: string;
-  foundationName: string;
-  type: "photo" | "video";
-  title: string;
-  description: string;
-  imageUrl: any;
-  date: string;
-  initialRating?: number;
-  initialComment?: string;
-  onRate?: (rating: number, comment: string) => void;
-  onReport?: (reason: string) => void;
+  mascotaNombre: string;
+  fundacionNombre: string;
+  tipo: "foto" | "video";
+  titulo: string;
+  descripcion: string;
+  imagenUrl: any;
+  fecha: string;
+  calificacion?: number | null;
+  comentario?: string | null;
+  estado?: "publicada" | "en_revision";
+  onRate?: (calificacion: number, comentario: string) => void;
+  onReport?: (motivo: string) => void;
 }
 
-export function EvidenceCard({ id, petName, foundationName, type, title, description, imageUrl, date, initialRating, initialComment, onRate, onReport }: EvidenceCardProps) {
-  const [rating, setRating] = useState(initialRating || 0);
-  const [comment, setComment] = useState(initialComment || "");
-  const [hoverRating, setHoverRating] = useState(0);
+export function EvidenceCard({
+  id,
+  mascotaNombre,
+  fundacionNombre,
+  tipo,
+  titulo,
+  descripcion,
+  imagenUrl,
+  fecha,
+  calificacion: initialCalificacion,
+  comentario: initialComentario,
+  estado,
+  onRate,
+  onReport,
+}: EvidenceCardProps) {
+  const [calificacion, setCalificacion] = useState(initialCalificacion || 0);
+  const [comentario, setComentario] = useState(initialComentario || "");
+  const [hoverCalificacion, setHoverCalificacion] = useState(0);
   const [showReport, setShowReport] = useState(false);
-  const [reportReason, setReportReason] = useState("");
-  const [reported, setReported] = useState(false);
+  const [motivo, setMotivo] = useState("");
+  const [reported, setReported] = useState(estado === "en_revision");
 
   const handleRate = (value: number) => {
-    setRating(value);
-    onRate?.(value, comment);
+    setCalificacion(value);
+    onRate?.(value, comentario);
   };
 
   const handleComment = (value: string) => {
-    setComment(value);
-    onRate?.(rating, value);
+    setComentario(value);
+    onRate?.(calificacion, value);
   };
 
   const handleReport = () => {
-    if (!reportReason) return;
-    onReport?.(reportReason);
+    if (!motivo) return;
+    onReport?.(motivo);
     setReported(true);
     setShowReport(false);
   };
@@ -53,13 +68,13 @@ export function EvidenceCard({ id, petName, foundationName, type, title, descrip
   return (
     <div className="bg-white border border-[#BDC8CA]/40 rounded-2xl overflow-hidden shadow-sm hover:shadow-md transition-shadow">
       <div className="relative h-48 bg-gray-100 overflow-hidden">
-        <ImageWithFallback src={imageUrl} alt={title} className="w-full h-full object-cover" />
+        <ImageWithFallback src={imagenUrl} alt={titulo} className="w-full h-full object-cover" />
         <div className="absolute top-3 left-3 flex gap-2">
-          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${type === "video" ? "bg-[#004955]/10 text-[#004955]" : "bg-gray-100 text-gray-600"}`}>
-            {type === "video" ? "Video" : "Foto"}
+          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${tipo === "video" ? "bg-[#004955]/10 text-[#004955]" : "bg-gray-100 text-gray-600"}`}>
+            {tipo === "video" ? "Video" : "Foto"}
           </span>
           <span className="bg-white/90 text-gray-600 px-3 py-1 rounded-full text-xs font-medium">
-            {date}
+            {fecha}
           </span>
         </div>
       </div>
@@ -67,40 +82,40 @@ export function EvidenceCard({ id, petName, foundationName, type, title, descrip
       <div className="p-5 space-y-3">
         <div className="flex items-center justify-between">
           <div>
-            <h3 className="text-[#004955] font-semibold text-lg">{title}</h3>
-            <p className="text-gray-500 text-xs">{petName} · {foundationName}</p>
+            <h3 className="text-[#004955] font-semibold text-lg">{titulo}</h3>
+            <p className="text-gray-500 text-xs">{mascotaNombre} · {fundacionNombre}</p>
           </div>
         </div>
 
-        <p className="text-[#3e494a] text-sm leading-relaxed">{description}</p>
+        <p className="text-[#3e494a] text-sm leading-relaxed">{descripcion}</p>
 
         <div className="border-t border-gray-100 pt-3 space-y-3">
           <div className="flex items-center gap-1">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
                 key={star}
-                onMouseEnter={() => setHoverRating(star)}
-                onMouseLeave={() => setHoverRating(0)}
+                onMouseEnter={() => setHoverCalificacion(star)}
+                onMouseLeave={() => setHoverCalificacion(0)}
                 onClick={() => handleRate(star)}
                 className="transition-transform hover:scale-110"
               >
                 <Star
                   size={22}
                   className={`transition-colors ${
-                    star <= (hoverRating || rating)
+                    star <= (hoverCalificacion || calificacion)
                       ? "fill-[#ffac13] text-[#ffac13]"
                       : "text-gray-300"
                   }`}
                 />
               </button>
             ))}
-            {rating > 0 && <span className="text-xs text-gray-500 ml-2">{rating}/5</span>}
+            {calificacion > 0 && <span className="text-xs text-gray-500 ml-2">{calificacion}/5</span>}
           </div>
 
           <div className="flex items-start gap-2">
             <MessageSquare size={16} className="text-gray-400 mt-1 flex-shrink-0" />
             <textarea
-              value={comment}
+              value={comentario}
               onChange={(e) => handleComment(e.target.value)}
               placeholder="Comentario opcional..."
               rows={2}
@@ -130,9 +145,9 @@ export function EvidenceCard({ id, petName, foundationName, type, title, descrip
                 {reportReasons.map((reason) => (
                   <button
                     key={reason}
-                    onClick={() => setReportReason(reason)}
+                    onClick={() => setMotivo(reason)}
                     className={`px-3 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                      reportReason === reason
+                      motivo === reason
                         ? "bg-[#ee5871] text-white"
                         : "bg-white border border-gray-200 text-gray-600 hover:border-[#ee5871]"
                     }`}
@@ -143,16 +158,16 @@ export function EvidenceCard({ id, petName, foundationName, type, title, descrip
               </div>
               <div className="flex gap-2 justify-end">
                 <button
-                  onClick={() => { setShowReport(false); setReportReason(""); }}
+                  onClick={() => { setShowReport(false); setMotivo(""); }}
                   className="px-3 py-1.5 text-xs text-gray-500 hover:text-gray-700"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={handleReport}
-                  disabled={!reportReason}
+                  disabled={!motivo}
                   className={`px-4 py-1.5 rounded-full text-xs font-medium transition-colors ${
-                    reportReason
+                    motivo
                       ? "bg-[#ee5871] text-white hover:bg-[#d94a63]"
                       : "bg-gray-200 text-gray-400 cursor-not-allowed"
                   }`}

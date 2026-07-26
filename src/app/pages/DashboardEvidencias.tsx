@@ -1,23 +1,28 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { DashboardLayout } from './DashboardLayout';
 import { EvidenceCard } from '../components/EvidenceCard';
 import { MOCK_EVIDENCE } from '../lib/mockData';
-import { storage } from '../lib/storage';
 import { PawPrint } from 'lucide-react';
 
 export function DashboardEvidencias() {
   const { isAuthenticated } = useAuth();
-  const ratings = storage.getEvidenceRatings();
+  const [evidencias, setEvidencias] = useState(MOCK_EVIDENCE);
 
-  const handleRate = (evidenceId: string, rating: number, comment: string) => {
-    const allRatings = storage.getEvidenceRatings();
-    allRatings[evidenceId] = { rating, comment };
-    storage.setEvidenceRatings(allRatings);
+  const handleRate = (evidenceId: string, calificacion: number, comentario: string) => {
+    setEvidencias((prev) =>
+      prev.map((ev) =>
+        ev.id === evidenceId ? { ...ev, calificacion, comentario } : ev
+      )
+    );
   };
 
-  const handleReport = (evidenceId: string, reason: string) => {
-    console.log(`Report submitted for ${evidenceId}: ${reason}`);
+  const handleReport = (evidenceId: string, motivo: string) => {
+    setEvidencias((prev) =>
+      prev.map((ev) =>
+        ev.id === evidenceId ? { ...ev, estado: "en_revision" as const } : ev
+      )
+    );
   };
 
   return (
@@ -30,7 +35,7 @@ export function DashboardEvidencias() {
           </p>
         </div>
 
-        {MOCK_EVIDENCE.length === 0 ? (
+        {evidencias.length === 0 ? (
           <div className="text-center py-16 bg-white rounded-2xl border border-[#BDC8CA]/40">
             <PawPrint size={48} className="mx-auto text-gray-300 mb-3" />
             <p className="text-gray-600 font-medium">Aún no tienes evidencias</p>
@@ -38,21 +43,22 @@ export function DashboardEvidencias() {
           </div>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            {MOCK_EVIDENCE.map((ev) => (
+            {evidencias.map((ev) => (
               <EvidenceCard
                 key={ev.id}
                 id={ev.id}
-                petName={ev.petName}
-                foundationName={ev.foundationName}
-                type={ev.type}
-                title={ev.title}
-                description={ev.description}
-                imageUrl={ev.imageUrl}
-                date={ev.date}
-                initialRating={ratings[ev.id]?.rating}
-                initialComment={ratings[ev.id]?.comment}
-                onRate={(rating, comment) => handleRate(ev.id, rating, comment)}
-                onReport={(reason) => handleReport(ev.id, reason)}
+                mascotaNombre={ev.mascotaNombre}
+                fundacionNombre={ev.fundacionNombre}
+                tipo={ev.tipo}
+                titulo={ev.titulo}
+                descripcion={ev.descripcion}
+                imagenUrl={ev.imagenUrl}
+                fecha={ev.fecha}
+                calificacion={ev.calificacion}
+                comentario={ev.comentario}
+                estado={ev.estado}
+                onRate={(cal, com) => handleRate(ev.id, cal, com)}
+                onReport={(motivo) => handleReport(ev.id, motivo)}
               />
             ))}
           </div>
