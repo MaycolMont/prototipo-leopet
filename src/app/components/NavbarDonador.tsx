@@ -136,11 +136,14 @@ export function NavbarDonador() {
                           <div className="flex items-start gap-3">
                             <div className={`mt-0.5 w-2 h-2 rounded-full flex-shrink-0 ${notif.leido ? "bg-transparent" : "bg-[#07c4e1]"}`} />
                             <div className="flex-1 min-w-0">
-                              {notif.es_alerta_salud && (
+                              {notif.tipo === "alerta_salud" && (
                                 <span className="text-[10px] font-semibold text-[#004955] uppercase tracking-wider">Alerta de salud</span>
                               )}
-                              {notif.es_admin_mensaje && (
+                              {notif.tipo === "admin_mensaje" && (
                                 <span className="text-[10px] font-semibold text-gray-500 uppercase tracking-wider">Mensaje del admin</span>
+                              )}
+                              {notif.tipo === "evidencia_favorita" && (
+                                <span className="text-[10px] font-semibold text-[#ee5871] uppercase tracking-wider">Fundación favorita</span>
                               )}
                               <p className="text-[#3e494a] text-xs leading-relaxed mt-0.5">
                                 {notif.mensaje || notif.descripcion_alerta}
@@ -156,7 +159,7 @@ export function NavbarDonador() {
                                 </button>
                               )}
 
-                              {notif.leido && !notif.calificacion && !notif.es_alerta_salud && !notif.es_admin_mensaje && (
+                              {notif.leido && !notif.calificacion && notif.tipo === "evidencia" && (
                                 <div className="flex items-center gap-1 mt-1.5">
                                   {[1, 2, 3, 4, 5].map((star) => (
                                     <button

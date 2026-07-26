@@ -2,8 +2,11 @@ import React, { createContext, useContext, useState, useCallback, type ReactNode
 import { storage } from "../lib/storage";
 import { MOCK_NOTIFICACIONES } from "../../data/mockNotificaciones";
 
+type Notificacion = typeof MOCK_NOTIFICACIONES[number];
+
 interface NotificationContextType {
-  notificaciones: typeof MOCK_NOTIFICACIONES;
+  notificaciones: Notificacion[];
+  agregarNotificacion: (data: Omit<Notificacion, "id" | "createdAt" | "updatedAt">) => void;
   marcarLeido: (id: number) => void;
   marcarTodasLeidas: () => void;
   calificar: (id: number, calificacion: number) => void;
@@ -14,15 +17,31 @@ interface NotificationContextType {
 const NotificationContext = createContext<NotificationContextType | null>(null);
 
 export function NotificationProvider({ children }: { children: ReactNode }) {
-  const [notificaciones, setNotificaciones] = useState(() => {
+  const [notificaciones, setNotificaciones] = useState<Notificacion[]>(() => {
     const stored = storage.getNotificaciones();
     return stored.length > 0 ? stored : MOCK_NOTIFICACIONES;
   });
 
-  const persist = (updated: typeof MOCK_NOTIFICACIONES) => {
+  const persist = (updated: Notificacion[]) => {
     setNotificaciones(updated);
     storage.setNotificaciones(updated);
   };
+
+  const agregarNotificacion = useCallback((data: Omit<Notificacion, "id" | "createdAt" | "updatedAt">) => {
+    setNotificaciones((prev) => {
+      const now = new Date().toISOString().split("T")[0];
+      const newId = prev.length > 0 ? Math.max(...prev.map((n) => n.id)) + 1 : 1;
+      const notif: Notificacion = {
+        ...data,
+        id: newId,
+        createdAt: now,
+        updatedAt: now,
+      };
+      const updated = [notif, ...prev];
+      storage.setNotificaciones(updated);
+      return updated;
+    });
+  }, []);
 
   const marcarLeido = useCallback((id: number) => {
     setNotificaciones((prev) => {
@@ -70,7 +89,7 @@ export function NotificationProvider({ children }: { children: ReactNode }) {
   const noLeidas = notificaciones.filter((n) => n.visible && !n.leido).length;
 
   return (
-    <NotificationContext.Provider value={{ notificaciones, marcarLeido, marcarTodasLeidas, calificar, ocultar, noLeidas }}>
+    <NotificationContext.Provider value={{ notificaciones, agregarNotificacion, marcarLeido, marcarTodasLeidas, calificar, ocultar, noLeidas }}>
       {children}
     </NotificationContext.Provider>
   );

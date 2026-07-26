@@ -1,6 +1,7 @@
 /**
  * @typedef {Object} Notificacion
  * @property {number} id                     // PK auto-increment
+ * @property {'evidencia' | 'alerta_salud' | 'admin_mensaje' | 'evidencia_favorita'} tipo  // Tipo de notificación
  * @property {number} [actualizacion_id]     // FK -> actualizacion_animal.id
  * @property {number} usuario_id             // FK -> usuario.id (destinatario)
  * @property {number} fundacion_id           // FK -> fundacion.id

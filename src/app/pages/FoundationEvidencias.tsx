@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Plus, Search, Camera, Star, Video, X, Image, ChevronDown } from 'lucide-react';
 import { useFoundation } from '../context/FoundationContext';
 import { useAuth } from '../context/AuthContext';
+import { useNotifications } from '../context/NotificationContext';
 import { FoundationLayout } from './FoundationLayout';
 import imgMain from "../../imports/DetalleDeMascotaLeoPet/b5e67b3823fbd4287dcd8b82dc791a0d64b1d4a9.png";
 import imgFood from "../../imports/DetalleDeMascotaLeoPet/9ec279e8e0b77d8a1cef5b76d12950fe70e8b841.png";
@@ -22,6 +23,7 @@ interface EvidenciaForm {
 export function FoundationEvidencias() {
   const { mascotas, evidencias, addEvidencia } = useFoundation();
   const { user } = useAuth();
+  const { agregarNotificacion } = useNotifications();
   const [search, setSearch] = useState("");
   const [showModal, setShowModal] = useState(false);
   const [form, setForm] = useState<EvidenciaForm>({ mascotaId: "", titulo: "", descripcion: "", tipo: "foto" });
@@ -62,6 +64,23 @@ export function FoundationEvidencias() {
     };
 
     addEvidencia(newEvidencia);
+
+    agregarNotificacion({
+      tipo: "evidencia_favorita",
+      usuario_id: 1,
+      fundacion_id: fundacionId === "fund-01" ? 1 : fundacionId === "fund-02" ? 2 : 3,
+      animal_id: Number(form.mascotaId),
+      visible: true,
+      leido: false,
+      fecha_leido: null,
+      calificacion: null,
+      fecha_calificacion: null,
+      es_alerta_salud: false,
+      descripcion_alerta: null,
+      mensaje: `${fundacionNombre} publicó evidencia de ${mascota.nombre}: '${form.titulo}'`,
+      es_admin_mensaje: false,
+    });
+
     setShowModal(false);
     setForm({ mascotaId: "", titulo: "", descripcion: "", tipo: "foto" });
     showToast("Evidencia enviada a los padrinos");
