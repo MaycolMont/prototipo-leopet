@@ -8,6 +8,7 @@ const KEYS = {
   FOUNDATION_MASCOTAS: "leopet_fundacion_mascotas",
   FOUNDATION_EVIDENCIAS: "leopet_fundacion_evidencias",
   FOUNDATION_ADVERTENCIAS: "leopet_fundacion_advertencias",
+  NOTIFICACIONES: "leopet_notificaciones",
 } as const;
 
 export const storage = {
@@ -130,5 +131,18 @@ export const storage = {
 
   setFoundationAdvertencias: (advertencias: any[]) => {
     localStorage.setItem(KEYS.FOUNDATION_ADVERTENCIAS, JSON.stringify(advertencias));
+  },
+
+  getNotificaciones: (): any[] => {
+    try {
+      const data = localStorage.getItem(KEYS.NOTIFICACIONES);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setNotificaciones: (notificaciones: any[]) => {
+    localStorage.setItem(KEYS.NOTIFICACIONES, JSON.stringify(notificaciones));
   },
 };
