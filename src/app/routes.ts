@@ -3,8 +3,6 @@ import { RootLayout } from "./RootLayout";
 import { HomePage } from "./HomePage";
 import { Catalog } from "./components/Catalog";
 import { PetDetail } from "./components/PetDetail";
-import { ManadasView } from "./components/ManadasView";
-import { ManadaDetailView } from "./components/ManadaDetailView";
 import { ConfigurarManada } from "./pages/ConfigurarManada";
 import { Dashboard } from "./pages/Dashboard";
 import { DashboardEvidencias } from "./pages/DashboardEvidencias";
@@ -38,19 +36,7 @@ export const router = createBrowserRouter([
         Component: PetDetail,
       },
       {
-        path: "manadas",
-        Component: ManadasView,
-      },
-      {
-        path: "manada/:id",
-        Component: ManadaDetailView,
-      },
-      {
         path: "mi-manada/configurar",
-        Component: ConfigurarManada,
-      },
-      {
-        path: "carrito",
         Component: ConfigurarManada,
       },
       {
