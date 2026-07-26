@@ -5,6 +5,7 @@ import { ImageWithFallback } from './figma/ImageWithFallback';
 import { MOCK_FUNDACIONES } from '../../data/mockFundaciones';
 import { MOCK_MASCOTAS } from '../../data/mockMascotas';
 import { useManada } from '../context/ManadaContext';
+import { useFavoritos } from '../context/FavoritosContext';
 
 const statusLabel: Record<string, string> = {
   NO_APADRINADO: "Disponible",
@@ -16,9 +17,11 @@ const statusLabel: Record<string, string> = {
 export function FundacionDetail() {
   const { id } = useParams<{ id: string }>();
   const { addToManada, pets: manadaPets } = useManada();
+  const { isFavorito, toggleFavorito } = useFavoritos();
 
   const fundacion = MOCK_FUNDACIONES.find((f) => f.id === id) || MOCK_FUNDACIONES[0];
   const mascotas = MOCK_MASCOTAS.filter((m) => m.fundacionId === fundacion.id);
+  const favorita = isFavorito(fundacion.id);
 
   const handleApadrinar = (mascota: typeof MOCK_MASCOTAS[0]) => {
     if (manadaPets.some((mp) => mp.petId === String(mascota.id))) return;
@@ -59,7 +62,7 @@ export function FundacionDetail() {
                 className="w-full h-full object-cover"
               />
             </div>
-            <div>
+            <div className="flex-1">
               <h1 className="text-white text-3xl md:text-4xl font-bold">{fundacion.nombre}</h1>
               <div className="flex items-center gap-3 mt-1">
                 <div className="flex items-center gap-1 text-white/80 text-sm">
@@ -72,6 +75,17 @@ export function FundacionDetail() {
                 </div>
               </div>
             </div>
+            <button
+              onClick={() => toggleFavorito(fundacion.id)}
+              className={`flex-shrink-0 w-11 h-11 rounded-full flex items-center justify-center transition-colors ${
+                favorita
+                  ? "bg-[#ee5871] text-white"
+                  : "bg-white/20 text-white hover:bg-white/30"
+              }`}
+              aria-label={favorita ? "Quitar de favoritas" : "Marcar como favorita"}
+            >
+              <Heart size={20} className={favorita ? "fill-white" : ""} />
+            </button>
           </div>
         </div>
       </div>

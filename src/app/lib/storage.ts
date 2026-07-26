@@ -2,6 +2,7 @@ const KEYS = {
   MANADA_CART: "leopet_manada_cart",
   USER: "leopet_user",
   SUBSCRIPTIONS: "leopet_subscriptions",
+  FAVORITOS: "leopet_favoritos",
   ADMIN_SOLICITUDES: "leopet_admin_solicitudes",
   ADMIN_DENUNCIAS: "leopet_admin_denuncias",
   FOUNDATION_MASCOTAS: "leopet_fundacion_mascotas",
@@ -52,6 +53,19 @@ export const storage = {
 
   setSubscriptions: (subs: any[]) => {
     localStorage.setItem(KEYS.SUBSCRIPTIONS, JSON.stringify(subs));
+  },
+
+  getFavoritos: (): string[] => {
+    try {
+      const data = localStorage.getItem(KEYS.FAVORITOS);
+      return data ? JSON.parse(data) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  setFavoritos: (ids: string[]) => {
+    localStorage.setItem(KEYS.FAVORITOS, JSON.stringify(ids));
   },
 
   getSolicitudes: (): any[] => {

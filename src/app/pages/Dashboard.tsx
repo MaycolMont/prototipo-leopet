@@ -1,13 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { PawPrint, Heart, TrendingUp, Calendar, CreditCard, AlertCircle } from 'lucide-react';
+import { PawPrint, Heart, TrendingUp, Calendar, CreditCard, AlertCircle, Building2 } from 'lucide-react';
 import { useSubscriptions } from '../context/SubscriptionContext';
 import { useManada } from '../context/ManadaContext';
+import { useFavoritos } from '../context/FavoritosContext';
 import { DashboardLayout } from './DashboardLayout';
 
 export function Dashboard() {
   const { subscriptions } = useSubscriptions();
   const { pets } = useManada();
+  const { favoritos } = useFavoritos();
 
   const activeSubs = subscriptions.filter((s) => s.status === "active");
   const pausedSubs = subscriptions.filter((s) => s.status === "paused");
@@ -18,7 +20,7 @@ export function Dashboard() {
     { label: "Suscripciones activas", value: activeSubs.length, icon: <CreditCard size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
     { label: "Mascotas apadrinadas", value: totalPets, icon: <PawPrint size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
     { label: "Aporte mensual", value: `$${totalMonthly.toFixed(2)}`, icon: <TrendingUp size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
-    { label: "Manada (carrito)", value: pets.length, icon: <Heart size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
+    { label: "Fundaciones favoritas", value: favoritos.length, icon: <Heart size={24} className="text-[#004955]" />, color: "bg-[#004955]/10" },
   ];
 
   return (
@@ -56,11 +58,11 @@ export function Dashboard() {
                   <p className="text-gray-500 text-xs">Califica el progreso de tus mascotas</p>
                 </div>
               </Link>
-              <Link to="/dashboard/manada" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
+              <Link to="/fundaciones?filtro=favoritas" className="flex items-center gap-3 p-3 rounded-xl hover:bg-gray-50 transition-colors">
                 <div className="bg-[#004955]/10 p-2 rounded-lg"><Heart size={18} className="text-[#004955]" /></div>
                 <div>
-                  <p className="text-[#004955] font-medium text-sm">Gestionar Manada</p>
-                  <p className="text-gray-500 text-xs">Modifica montos y controla tus suscripciones</p>
+                  <p className="text-[#004955] font-medium text-sm">Ver Favoritas</p>
+                  <p className="text-gray-500 text-xs">Tus fundaciones guardadas</p>
                 </div>
               </Link>
             </div>
