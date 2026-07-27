@@ -147,7 +147,7 @@ export function FundacionDetail() {
             ) : (
               <div className="space-y-4">
                 {mascotas.map((mascota) => {
-                  const isInManada = manadaPets.some((mp) => mp.petId === String(mascota.id));
+                  const isInManada = manadaMascotas.some((a) => a.animalId === String(mascota.id));
                   return (
                     <div
                       key={mascota.id}
